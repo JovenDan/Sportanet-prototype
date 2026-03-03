@@ -191,6 +191,11 @@
 
                 const script = document.createElement("script");
                 script.src = "JS/header.js";
+                script.onload = () => {
+                    if (typeof initHeaderEvents === 'function') {
+                        initHeaderEvents();
+                    }
+                };
                 document.body.appendChild(script);
 
             } catch (error) {

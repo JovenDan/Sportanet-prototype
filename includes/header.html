@@ -1,181 +1,179 @@
-<!-- NAVBAR BOOTSTRAP -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light mt-auto">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="index.html">Sportanet<img src="img/logo.png" width="30" height="30"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-        <!-- Logo -->
-        <a class="navbar-brand fw-bold" href="index.html" id="logo-sportanet">
-            Sportanet
-            <img id="logo-sportanet-img" src="img/Logo.png" class="img-fluid rounded" style="width: 30px;" alt="Logo Sportanet">
-        </a>
-
-        <!-- Botón hamburguesa Bootstrap -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSportanet"
-            aria-controls="navbarSportanet" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Menú -->
-        <div class="collapse navbar-collapse" id="navbarSportanet">
-            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
-
-                <li class="nav-item">
-                    <a id="nav-inicio" class="nav-link" href="index.html">Inicio</a>
-                </li>
-
-                <li class="nav-item">
-                    <a id="nav-eventos" class="nav-link" href="events.html">Eventos</a>
-                </li>
-
-                <li class="nav-item">
-                    <button id="btn-login" class="btn btn-outline-light btn-sm">
-                        Iniciar Sesión
-                    </button>
-                </li>
-
-                <!-- Usuario logueado -->
-                <li id="user-menu-container" class="nav-item dropdown d-none">
-                    <a class="nav-link dropdown-toggle" href="#" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        <span id="user-name"></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        <li>
-                            <button id="btn-profile" class="dropdown-item">
-                                Mi Perfil
-                            </button>
-                        </li>
-                        <li>
-                            <button id="btn-logout" class="dropdown-item text-danger">
-                                Cerrar Sesión
-                            </button>
-                        </li>
-                    </ul>
-                </li>
-
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="events.html">Eventos</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <button id="btn-login" class="btn btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#modal-auth">
+            Iniciar Sesión
+          </button>
+          <div id="user-menu-container" class="dropdown d-none">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userMenu"
+               data-bs-toggle="dropdown" aria-expanded="false">
+              <span id="user-name"></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userMenu">
+              <li><a class="dropdown-item" href="#" id="btn-profile">Mi Perfil</a></li>
+              <li><a class="dropdown-item" href="#" id="btn-logout">Salir</a></li>
             </ul>
+          </div>
         </div>
+      </div>
     </div>
-</nav>
+  </nav>
+</header>
 
-<div class="modal fade" id="modal-auth" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+<!-- AUTH MODAL -->
+<div class="modal fade" id="modal-auth" tabindex="-1" aria-labelledby="modalAuthTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content contenedor-logreg">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAuthTitle">Iniciar Sesión</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <!-- LOGIN FORM -->
+        <form id="form-login" class="auth-form">
+          <div class="mb-3">
+            <label for="login-email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="login-email" name="email"
+                   placeholder="tu@email.com" required>
+            <div class="invalid-feedback" id="error-login-email"></div>
+          </div>
+          <div class="mb-3">
+            <label for="login-password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="login-password" name="password"
+                   placeholder="Mínimo 6 caracteres" required>
+            <div class="invalid-feedback" id="error-login-password"></div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100" id="btn-submit-login">Ingresar</button>
+          <div class="form-text text-center mt-2" id="login-message"></div>
+          <p class="text-center mt-3">
+            ¿No tienes cuenta?
+            <button type="button" id="mostrar-registro" class="btn btn-link p-0">Regístrate aquí</button>
+          </p>
+        </form>
 
-            <div class="modal-header">
-                <h5 class="modal-title">Autenticación</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-
-                <!-- LOGIN -->
-                <form id="form-login" class="auth-form">
-
-                    <div class="mb-3">
-                        <label class="form-label">Correo Electrónico</label>
-                        <input type="email" id="login-email" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Contraseña</label>
-                        <input type="password" id="login-password" class="form-control" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary w-100">
-                        Ingresar
-                    </button>
-
-                    <div class="text-center mt-3">
-                        <button type="button" id="mostrar-registro"
-                            class="btn btn-link p-0">
-                            Crear cuenta
-                        </button>
-                    </div>
-                </form>
-
-                <!-- REGISTRO -->
-                <form id="form-registro" class="auth-form d-none">
-
-                    <div class="mb-3">
-                        <label class="form-label">Nombre Completo</label>
-                        <input type="text" id="reg-nombre" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Correo Electrónico</label>
-                        <input type="email" id="reg-email" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Teléfono</label>
-                        <input type="tel" id="reg-phone" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Contraseña</label>
-                        <input type="password" id="reg-password" class="form-control" required>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Confirmar Contraseña</label>
-                        <input type="password" id="reg-password-confirm" class="form-control" required>
-                    </div>
-
-                    <button type="submit" class="btn btn-success w-100">
-                        Crear Cuenta
-                    </button>
-
-                    <div class="text-center mt-3">
-                        <button type="button" id="mostrar-login"
-                            class="btn btn-link p-0">
-                            Volver al login
-                        </button>
-                    </div>
-                </form>
-
-            </div>
-        </div>
+        <!-- REGISTER FORM -->
+        <form id="form-registro" class="auth-form d-none">
+          <h5 class="d-none" id="modalRegisterTitle">Crear Cuenta</h5>
+          <div class="mb-3 form-check">
+            <label class="form-check-label" for="reg-user-type">Tipo de usuario</label>
+            <input type="checkbox" class="form-check-input" id="reg-user-type" name="userType" required>
+          </div>
+          <div class="mb-3">
+            <label for="reg-nombre" class="form-label">Nombre Completo</label>
+            <input type="text" class="form-control" id="reg-nombre" name="nombre" placeholder="Juan Pérez" required>
+            <div class="invalid-feedback" id="error-reg-nombre"></div>
+          </div>
+          <div class="mb-3">
+            <label for="reg-email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="reg-email" name="email" placeholder="tu@email.com" required>
+            <div class="invalid-feedback" id="error-reg-email"></div>
+          </div>
+          <div class="mb-3">
+            <label for="reg-phone" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="reg-phone" name="phone" placeholder="+57 (123) 456-7890" required>
+            <div class="invalid-feedback" id="error-reg-phone"></div>
+          </div>
+          <div class="mb-3">
+            <label for="reg-password" class="form-label">Contraseña</label>
+            <input type="password" class="form-control" id="reg-password" name="password"
+                   placeholder="Mínimo 6 caracteres" required minlength="6">
+            <div class="invalid-feedback" id="error-reg-password"></div>
+          </div>
+          <div class="mb-3">
+            <label for="reg-password-confirm" class="form-label">Confirmar Contraseña</label>
+            <input type="password" class="form-control" id="reg-password-confirm" name="password_confirm"
+                   placeholder="Repite tu contraseña" required>
+            <div class="invalid-feedback" id="error-reg-password-confirm"></div>
+          </div>
+          <button type="submit" class="btn btn-primary w-100" id="btn-submit-registro">Crear Cuenta</button>
+          <div class="form-text text-center mt-2" id="registro-message"></div>
+          <p class="text-center mt-3">
+            ¿Ya tienes cuenta?
+            <button type="button" id="mostrar-login" class="btn btn-link p-0">Inicia sesión aquí</button>
+          </p>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 
-<div class="modal fade" id="modal-perfil" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title">Mi Perfil</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body">
-                <form id="form-editar-perfil">
-
-                    <div class="mb-3">
-                        <label class="form-label">Nombre Completo</label>
-                        <input type="text" id="perfil-nombre" class="form-control" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Correo Electrónico</label>
-                        <input type="email" id="perfil-email" class="form-control" readonly>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Teléfono</label>
-                        <input type="tel" id="perfil-phone" class="form-control" readonly>
-                    </div>
-
-                    <div class="d-grid gap-2">
-                        <button type="button" class="btn btn-secondary" id="btn-editar-perfil">
-                            Editar Perfil
-                        </button>
-                        <button type="button" class="btn btn-danger" id="btn-eliminar-cuenta">
-                            Eliminar Cuenta
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-        </div>
+<!-- PROFILE MODAL -->
+<div class="modal fade" id="modal-perfil" tabindex="-1" aria-labelledby="modalPerfilTitle" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalPerfilTitle">Mi Perfil</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="form-editar-perfil" class="profile-form">
+          <div class="mb-3">
+            <label for="perfil-nombre" class="form-label">Nombre Completo</label>
+            <input type="text" class="form-control" id="perfil-nombre" name="nombre"
+                   placeholder="Juan Pérez" required readonly>
+            <div class="invalid-feedback" id="error-perfil-nombre"></div>
+          </div>
+          <div class="mb-3">
+            <label for="perfil-email" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="perfil-email" name="email"
+                   placeholder="tu@email.com" required readonly>
+            <div class="invalid-feedback" id="error-perfil-email"></div>
+          </div>
+          <div class="mb-3">
+            <label for="perfil-phone" class="form-label">Teléfono</label>
+            <input type="tel" class="form-control" id="perfil-phone" name="phone"
+                   placeholder="+57 (123) 456-7890" required readonly>
+            <div class="invalid-feedback" id="error-perfil-phone"></div>
+          </div>
+          <div id="perfil-readonly-actions" class="mb-3">
+            <button type="button" class="btn btn-secondary" id="btn-editar-perfil">Editar Perfil</button>
+          </div>
+          <div id="perfil-buttons" class="mb-3 d-none">
+            <button type="submit" class="btn btn-primary" id="btn-guardar-perfil">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" id="btn-cancelar-perfil">Cancelar</button>
+          </div>
+          <div class="form-text text-center mt-2" id="perfil-message"></div>
+          <div class="alert alert-danger kt-times margin-top" id="danger-zone"><!-- keep no changes? --></div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal fade" id="modal-confirmar-eliminar" tabindex="-1" aria-labelledby="confirmarTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmarTitle">Confirmar Eliminación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+      </div>
+      <div class="modal-body">
+        <p>¿Estás seguro de que deseas eliminar tu cuenta?</p>
+        <p class="text-danger"><strong>Esta acción es permanente y no se puede deshacer.</strong></p>
+      </div>
+      <div class="modal-footer">
+        <button id="btn-cancelar-eliminar" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button id="btn-confirmar-eliminar" type="button" class="btn btn-danger">Sí, Eliminar Mi Cuenta</button>
+      </div>
+    </div>
+  </div>
+</div>
+

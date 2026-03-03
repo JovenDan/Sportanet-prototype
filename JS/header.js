@@ -7,17 +7,23 @@ const APP_STATE = {
 };
 
 // ===== INICIALIZACIÓN =====
+// referencias a instancias de Bootstrap Modal que se crean una sola vez
+let authModalInstance, profileModalInstance, confirmDeleteModalInstance;
+
 function initHeaderEvents() {
     // Verificar si el usuario ya está logueado
     checkAuthStatus();
     
+    // bootstrap modal objects
+    const authModalEl = document.getElementById("modal-auth");
+    const profileModalEl = document.getElementById("modal-perfil");
+    const confirmDeleteModalEl = document.getElementById("modal-confirmar-eliminar");
+    if (authModalEl) authModalInstance = new bootstrap.Modal(authModalEl);
+    if (profileModalEl) profileModalInstance = new bootstrap.Modal(profileModalEl);
+    if (confirmDeleteModalEl) confirmDeleteModalInstance = new bootstrap.Modal(confirmDeleteModalEl);
+
     // Elementos del DOM
-    const modal = document.getElementById("modal-auth");
     const btnLogin = document.getElementById("btn-login");
-    const closeModal = document.getElementById("close-modal");
-    const hamburger = document.getElementById("hamburger");
-    const navMenu = document.getElementById("nav-menu");
-    
     // Formularios
     const formLogin = document.getElementById("form-login");
     const formRegistro = document.getElementById("form-registro");
@@ -26,62 +32,34 @@ function initHeaderEvents() {
     const mostrarRegistro = document.getElementById("mostrar-registro");
     const mostrarLogin = document.getElementById("mostrar-login");
 
-    // ===== MENÚ HAMBURGUESERO =====
-    hamburger?.addEventListener("click", () => {
-        hamburger.classList.toggle("active");
-        navMenu.classList.toggle("active");
-    });
-
-    // Cerrar menú al hacer click en un enlace
-    document.querySelectorAll(".nav-link").forEach(link => {
-        link.addEventListener("click", () => {
-            hamburger.classList.remove("active");
-            navMenu.classList.remove("active");
-        });
-    });
+    // ===== NAVBAR COLLAPSE handled by Bootstrap automatically =====
+    // no manual hamburger logic required
 
     // ===== MODAL =====
-    
     // Abrir modal login
     btnLogin?.addEventListener("click", (e) => {
         e.preventDefault();
-        openModal();
-    });
-
-    // Cerrar modal
-    closeModal?.addEventListener("click", () => {
-        closeAuthModal();
-    });
-
-    // Cerrar modal al hacer click fuera
-    window.addEventListener("click", (e) => {
-        if (e.target === modal) {
-            closeAuthModal();
-        }
-    });
-
-    // Cerrar modal con ESC
-    document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape") {
-            closeAuthModal();
-        }
+        authModalInstance?.show();
     });
 
     // ===== TOGGLE ENTRE FORMULARIOS =====
+    // Bootstrap uses d-none class for hiding, and the modal title has id "modalAuthTitle".
     
     mostrarRegistro?.addEventListener("click", (e) => {
         e.preventDefault();
-        formLogin.classList.remove("active-form");
-        formRegistro.classList.add("active-form");
-        document.getElementById("modal-title").textContent = "Crear Cuenta";
+        formLogin.classList.add("d-none");
+        formRegistro.classList.remove("d-none");
+        const title = document.getElementById("modalAuthTitle");
+        if (title) title.textContent = "Crear Cuenta";
         clearFormMessages();
     });
 
     mostrarLogin?.addEventListener("click", (e) => {
         e.preventDefault();
-        formRegistro.classList.remove("active-form");
-        formLogin.classList.add("active-form");
-        document.getElementById("modal-title").textContent = "Iniciar Sesión";
+        formRegistro.classList.add("d-none");
+        formLogin.classList.remove("d-none");
+        const title = document.getElementById("modalAuthTitle");
+        if (title) title.textContent = "Iniciar Sesión";
         clearFormMessages();
     });
 
@@ -162,6 +140,7 @@ function validateLoginForm() {
  * @returns {boolean}
  */
 function validateRegistroForm() {
+    const userType = document.getElementById("reg-user-type").checked ? "organizer" : "athlete"; // Ejemplo de asignación de tipo de usuario
     const nombre = document.getElementById("reg-nombre").value.trim();
     const email = document.getElementById("reg-email").value.trim();
     const phone = document.getElementById("reg-phone").value.trim();
@@ -346,6 +325,7 @@ async function handleRegistro() {
         return;
     }
 
+    // const userType = document.getElementById("reg-user-type").checked ? "organizer" : "athlete"; // Ejemplo de asignación de tipo de usuario
     const nombre = document.getElementById("reg-nombre").value.trim();
     const email = document.getElementById("reg-email").value.trim();
     const phone = document.getElementById("reg-phone").value.trim();
@@ -429,23 +409,17 @@ function handleLogout() {
 // ===== FUNCIONES DE UI =====
 
 /**
- * Abre el modal de autenticación
+ * Abre el modal de autenticación usando Bootstrap API
  */
 function openModal() {
-    const modal = document.getElementById("modal-auth");
-    modal.classList.add("show");
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
+    authModalInstance?.show();
 }
 
 /**
- * Cierra el modal de autenticación
+ * Cierra el modal de autenticación usando Bootstrap API
  */
 function closeAuthModal() {
-    const modal = document.getElementById("modal-auth");
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "auto";
+    authModalInstance?.hide();
     clearFormMessages();
 }
 
@@ -652,10 +626,8 @@ function openProfileModal() {
     if (perfilButtons) perfilButtons.style.display = 'none';
     if (dangerZone) dangerZone.style.display = 'none';
 
-    const modalPerfil = document.getElementById("modal-perfil");
-    modalPerfil.classList.add("show");
-    modalPerfil.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
+    // mostrar modal mediante Bootstrap API
+    profileModalInstance?.show();
 
     // Limpiar mensajes previos
     clearProfileMessages();
@@ -667,10 +639,7 @@ function openProfileModal() {
  * Cierra el modal de perfil
  */
 function closeProfileModal() {
-    const modalPerfil = document.getElementById("modal-perfil");
-    modalPerfil.classList.remove("show");
-    modalPerfil.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "auto";
+    profileModalInstance?.hide();
     clearProfileMessages();
 }
 
@@ -733,20 +702,14 @@ function revertProfileReadOnly() {
  * Abre el modal de confirmación de eliminación
  */
 function openConfirmDeleteModal() {
-    const modalConfirmarEliminar = document.getElementById("modal-confirmar-eliminar");
-    modalConfirmarEliminar.classList.add("show");
-    modalConfirmarEliminar.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
+    confirmDeleteModalInstance?.show();
 }
 
 /**
  * Cierra el modal de confirmación de eliminación
  */
 function closeConfirmDeleteModal() {
-    const modalConfirmarEliminar = document.getElementById("modal-confirmar-eliminar");
-    modalConfirmarEliminar.classList.remove("show");
-    modalConfirmarEliminar.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "auto";
+    confirmDeleteModalInstance?.hide();
 }
 
 /**
