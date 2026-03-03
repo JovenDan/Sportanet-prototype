@@ -325,7 +325,7 @@ async function handleRegistro() {
         return;
     }
 
-    // const userType = document.getElementById("reg-user-type").checked ? "organizer" : "athlete"; // Ejemplo de asignación de tipo de usuario
+    const userType = document.querySelector('input[name="userType"]:checked')?.value;
     const nombre = document.getElementById("reg-nombre").value.trim();
     const email = document.getElementById("reg-email").value.trim();
     const phone = document.getElementById("reg-phone").value.trim();

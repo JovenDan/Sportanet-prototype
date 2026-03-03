@@ -71,10 +71,26 @@
         <!-- REGISTER FORM -->
         <form id="form-registro" class="auth-form d-none">
           <h5 class="d-none" id="modalRegisterTitle">Crear Cuenta</h5>
-          <div class="mb-3 form-check">
-            <label class="form-check-label" for="reg-user-type">Tipo de usuario</label>
-            <input type="checkbox" class="form-check-input" id="reg-user-type" name="userType" required>
+
+          <div class="mb-3">
+            <label class="form-label d-block">Tipo de usuario</label>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="userType" value="organizer" id="organizer">
+              <label class="form-check-label" for="organizer">Organizador</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="userType" value="athlete" id="athlete">
+              <label class="form-check-label" for="athlete">Atleta</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="userType" value="admin" id="admin">
+              <label class="form-check-label" for="admin">Admin</label>
+            </div>
           </div>
+
           <div class="mb-3">
             <label for="reg-nombre" class="form-label">Nombre Completo</label>
             <input type="text" class="form-control" id="reg-nombre" name="nombre" placeholder="Juan Pérez" required>
