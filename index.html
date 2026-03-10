@@ -19,9 +19,14 @@
     <link rel="stylesheet" href="CSS/header.css">
     <link rel="stylesheet" href="CSS/style.css">
 
+    <!-- Script tema -->
+    <script src="JS/theme.js"></script>
+
     <style>
+        /* page‑specific base overrides (font and gradients) */
         body {
             font-family: 'Tomorrow', sans-serif;
+            /* default dark gradient kept here but light theme will override in CSS */
             background: linear-gradient(135deg, #001f3f, #003366);
         }
 
@@ -46,6 +51,22 @@
             color: white;
             padding: 1rem 0;
         }
+
+        /* light-theme overrides for inline styles to ensure specificity */
+        body.light {
+            background: #f4f4f4 !important;
+            color: #001f3f !important;
+        }
+
+        body.light .hero {
+            color: #001f3f;
+            background: linear-gradient(135deg, #f4f4f4, #e0e0e0) !important;
+        }
+
+        body.light footer {
+            background-color: #f4f4f4 !important;
+            color: #001f3f !important;
+        }
     </style>
 </head>
 
@@ -54,8 +75,17 @@
     <!-- Header dinámico -->
     <div id="header-container"></div>
 
+    <!-- Switch de cambio de tema -->
+    <section class="theme-S">
+        <div class="Switch">
+            <!-- use a proper button input and label for accessibility -->
+            <input type="button" id="switch" class="s-button-light" value="" />
+        </div>
+    </section>
+
     <!-- Contenido principal -->
     <main class="flex-fill">
+
 
         <section class="hero">
             <div class="container">

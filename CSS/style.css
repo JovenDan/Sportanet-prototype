@@ -199,6 +199,96 @@ section {
     margin-bottom: 1.5rem;
 }
 
+/* ===== TEMA ===== */
+
+.theme-S {
+    position: fixed;
+    top: 1.7rem;
+    right: 0.4rem;
+    background-color: gray;
+    color: white;
+    /* flex alignment not needed when fixed */
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+
+    /* ensure the toggle button has reasonable size inside the container */
+.theme-S .btn {
+    padding: 0.5rem 1rem;
+}
+
+.s-button-light {
+    background-color: white;
+    color: black;
+    border: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.s-button-light:hover {
+background-color: black;
+border-color: white;
+color:white;
+box-shadow: 0 4px 12px white;
+}
+
+.s-button-dark {
+    background-color: black;
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.s-button-dark:hover {
+    background-color: white;
+    border-color: black;
+    color:black;
+    box-shadow: 0 4px 12px black;
+}
+
+/* light-theme overrides */
+body.light {
+    background-color: #f4f4f4;
+    color: #001f3f;
+}
+
+body.light a {
+    color: #001f3f;
+}
+
+body.light a:hover {
+    color: #004d80;
+}
+
+body.light .btn {
+    background-color: #001f3f;
+    color: #ffffff;
+}
+
+body.light .btn:hover {
+    background-color: #000f1a;
+}
+
+body.light .navbar {
+    background-color: #e0e0e0 !important;
+}
+
+body.light .hero {
+    color: #001f3f;
+    background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
+}
+
+body.light footer {
+    background-color: #f4f4f4;
+    color: #001f3f;
+}
+
+
 /* ===== TARJETAS DE EVENTOS ===== */
 
 .eventos-grid {

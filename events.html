@@ -17,6 +17,9 @@
     <link rel="stylesheet" href="CSS/header.css">
     <link rel="stylesheet" href="CSS/style.css">
 
+    <!-- Script tema -->
+    <script src="JS/theme.js"></script>
+
     <style>
         body {
             font-family: 'Tomorrow', sans-serif;
@@ -44,6 +47,20 @@
             background-color: #001f3f;
         }
 
+        /* light-theme overrides */
+        body.light {
+            background: #f4f4f4 !important;
+            color: #001f3f !important;
+        }
+
+        body.light footer {
+            background-color: #f4f4f4 !important;
+            color: #001f3f !important;
+        }
+
+        body.light .eventos-tarjeta {
+            background-color: #ffffff !important;
+        }
     </style>
 </head>
 
@@ -51,6 +68,13 @@
 
     <!-- Header dinámico -->
     <div id="header-container"></div>
+
+    <!-- Switch de cambio de tema -->
+    <section class="theme-S">
+        <div class="Switch">
+            <input type="button" id="switch" class="s-button-light" value="" />
+        </div>
+    </section>
 
     <main class="flex-fill">
 
