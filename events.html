@@ -61,6 +61,17 @@
         body.light .eventos-tarjeta {
             background-color: #ffffff !important;
         }
+
+        .api-client {
+            border-top: 1px solid rgba(0,0,0,.1);
+        }
+        .api-client pre {
+            background: #f8f9fa;
+            border-radius: 0.5rem;
+            min-height: 320px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
     </style>
 </head>
 
@@ -177,6 +188,80 @@
             </div>
         </section>
 
+        <section id="member-api-client" class="api-client py-5 bg-white text-dark">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <h2>Cliente REST integrado</h2>
+                        <p>Prueba los endpoints de miembros del club y organizadores desde esta página.</p>
+
+                        <div class="mb-3">
+                            <label for="getId" class="form-label">ID del miembro</label>
+                            <input id="getId" type="number" class="form-control" value="1" placeholder="ID del miembro">
+                        </div>
+                        <button class="btn btn-primary mb-3" id="btn-get-all">Listar miembros</button>
+                        <button class="btn btn-outline-primary mb-3" id="btn-get-one">Obtener miembro</button>
+
+                        <hr>
+                        <h4>Crear nuevo miembro</h4>
+                        <div class="mb-3">
+                            <input id="postName" class="form-control" placeholder="Nombre" value="María González">
+                        </div>
+                        <div class="mb-3">
+                            <input id="postEmail" class="form-control" placeholder="Email" value="maria@uni.edu">
+                        </div>
+                        <div class="mb-3">
+                            <input id="postAge" type="number" class="form-control" placeholder="Edad" value="21">
+                        </div>
+                        <div class="mb-3">
+                            <label for="postRole" class="form-label">Rol</label>
+                            <select id="postRole" class="form-select">
+                                <option value="member" selected>Miembro</option>
+                                <option value="organizer">Organizador</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-success mb-3" id="btn-create">Crear miembro</button>
+
+                        <hr>
+                        <h4>Actualizar miembro</h4>
+                        <div class="mb-3">
+                            <input id="putId" type="number" class="form-control" placeholder="ID" value="1">
+                        </div>
+                        <div class="mb-3">
+                            <input id="putName" class="form-control" placeholder="Nombre (opcional)" value="Ana Actualizada">
+                        </div>
+                        <div class="mb-3">
+                            <input id="putEmail" class="form-control" placeholder="Email (opcional)" value="ana.nuevo@uni.edu">
+                        </div>
+                        <div class="mb-3">
+                            <input id="putAge" type="number" class="form-control" placeholder="Edad (opcional)" value="23">
+                        </div>
+                        <div class="mb-3">
+                            <label for="putRole" class="form-label">Rol (opcional)</label>
+                            <select id="putRole" class="form-select">
+                                <option value="">-- Mantener rol actual --</option>
+                                <option value="member">Miembro</option>
+                                <option value="organizer">Organizador</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-warning mb-3" id="btn-update">Actualizar miembro</button>
+
+                        <hr>
+                        <h4>Eliminar miembro</h4>
+                        <div class="mb-3">
+                            <input id="deleteId" type="number" class="form-control" placeholder="ID" value="3">
+                        </div>
+                        <button class="btn btn-danger mb-3" id="btn-delete">Eliminar miembro</button>
+                    </div>
+                    <div class="col-lg-6">
+                        <h4>Resultado</h4>
+                        <pre id="resultado" class="p-3 bg-light border" style="min-height: 320px; overflow:auto;">(Aquí aparecerá el resultado)</pre>
+                        <div id="error-mensaje" class="text-danger mt-2"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Contacto -->
         <section class="contacto">
             <div class="container text-center">
@@ -253,6 +338,6 @@
             alert(`Inscripción realizada.\n\nHola ${user.nombre}, estás inscrito en ${nombreEvento}.`);
         }
     </script>
-
+    <script src="JS/rest-client.js"></script>
 </body>
 </html>

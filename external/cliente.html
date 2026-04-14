@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Cliente REST</title>
+    <style>
+        body { font-family: monospace; max-width: 1000px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        .section { border: 1px solid #333; padding: 15px; margin: 20px 0; background: white; }
+        .curl { background: #000; color: #0f0; padding: 10px; font-family: monospace; white-space: pre-wrap; border-radius: 3px; }
+        button { background: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; margin: 5px; }
+        button:hover { background: #45a049; }
+        input, textarea { padding: 8px; margin: 5px; width: 300px; font-family: monospace; }
+        pre { background: #fff; padding: 10px; border: 1px solid #ccc; min-height: 100px; }
+        .error { color: red; font-weight: bold; }
+        #estado { font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Cliente REST</h1>
+    
+    <div class="section">
+        <h2>Nombre: REST API (Representational State Transfer)</h2>
+        
+        <h3>Características esenciales:</h3>
+        <ul>
+            <li>Recursos identificados por URLs (/students, /students/1)</li>
+            <li>Operaciones CRUD mediante métodos HTTP estándar</li>
+            <li>Sin estado (stateless): cada petición es independiente</li>
+            <li>Códigos de estado HTTP para indicar resultado (200, 201, 404, etc.)</li>
+            <li>Representaciones del recurso en formato JSON</li>
+        </ul>
+        
+        <h3>Transporte:</h3>
+        <p>HTTP/1.1 o HTTP/2</p>
+        
+        <h3>Formato:</h3>
+        <p>JSON</p>
+        
+        <h3>Estado del servidor:</h3>
+        <p><span id="estado">Verificando...</span></p>
+    </div>
+    
+    <div class="section">
+        <h2>Interfaz para probar operaciones REST</h2>
+        
+        <h3>GET - Listar todos los estudiantes</h3>
+        <button onclick="getAll()">Listar estudiantes</button>
+        
+        <h3>GET - Obtener estudiante por ID</h3>
+        <input id="getId" type="number" value="1" placeholder="ID del estudiante">
+        <button onclick="getOne()">Obtener estudiante</button>
+        
+        <h3>POST - Crear nuevo estudiante</h3>
+        <input id="postName" placeholder="Nombre" value="María González"><br>
+        <input id="postEmail" placeholder="Email" value="maria@uni.edu"><br>
+        <input id="postAge" type="number" placeholder="Edad" value="21"><br>
+        <button onclick="create()">Crear estudiante</button>
+        
+        <h3>PUT - Actualizar estudiante existente</h3>
+        <input id="putId" type="number" placeholder="ID" value="1"><br>
+        <input id="putName" placeholder="Nombre (opcional)" value="Ana Actualizada"><br>
+        <input id="putEmail" placeholder="Email (opcional)" value="ana.nuevo@uni.edu"><br>
+        <input id="putAge" type="number" placeholder="Edad (opcional)" value="23"><br>
+        <button onclick="update()">Actualizar estudiante</button>
+        
+        <h3>DELETE - Eliminar estudiante</h3>
+        <input id="deleteId" type="number" placeholder="ID" value="3">
+        <button onclick="remove()">Eliminar estudiante</button>
+        
+        <h3>Resultado:</h3>
+        <pre id="resultado">(Aquí aparecerá el resultado)</pre>
+        <div id="error-mensaje" class="error"></div>
+    </div>
+    
+    <div class="section">
+        <h2>Llamadas desde línea de comandos (curl)</h2>
+        
+        <h3>Listar todos los estudiantes:</h3>
+        <div class="curl">curl http://localhost:3000/students</div>
+        
+        <h3>Obtener estudiante con ID 1:</h3>
+        <div class="curl">curl http://localhost:3000/students/1</div>
+        
+        <h3>Crear nuevo estudiante:</h3>
+        <div class="curl">curl -X POST http://localhost:3000/students -H "Content-Type: application/json" -d '{"name":"María González","email":"maria@uni.edu","age":21}'</div>
+        
+        <h3>Actualizar estudiante con ID 1:</h3>
+        <div class="curl">curl -X PUT http://localhost:3000/students/1 -H "Content-Type: application/json" -d '{"name":"Ana Actualizada","email":"ana.nuevo@uni.edu","age":23}'</div>
+        
+        <h3>Eliminar estudiante con ID 3:</h3>
+        <div class="curl">curl -X DELETE http://localhost:3000/students/3</div>
+    </div>
+    
+    <div class="section">
+        <h2>Explicación final</h2>
+        <p>REST (Representational State Transfer) es un estilo arquitectónico para diseñar servicios web. Se basa en recursos identificados por URLs, sobre los cuales se realizan operaciones utilizando los métodos HTTP estándar: GET para obtener, POST para crear, PUT para actualizar y DELETE para eliminar.</p>
+        
+        <p>Cada petición es independiente (stateless), lo que significa que el servidor no almacena información sobre el estado del cliente entre peticiones. Esto facilita el escalado horizontal y la caché.</p>
+        
+        <p>Las respuestas incluyen códigos de estado HTTP que indican el resultado de la operación (200 OK, 201 Created, 404 Not Found, etc.) y generalmente el cuerpo contiene una representación del recurso en formato JSON.</p>
+        
+        <p>Es el estándar de facto para APIs web por su simplicidad, uso de infraestructura web existente y facilidad de implementación en múltiples lenguajes.</p>
+    </div>
+    
+    <script>
+        const BASE_URL = 'http://localhost:3000';
+        
+        // Verificar conexión al cargar la página
+        window.onload = async function() {
+            try {
+                const res = await fetch(`${BASE_URL}/`, {
+                    method: 'GET'
+                });
+                if (res.ok) {
+                    document.getElementById('estado').innerHTML = '✅ Conectado al servidor REST';
+                } else {
+                    document.getElementById('estado').innerHTML = '❌ Error: ' + res.status;
+                }
+            } catch (e) {
+                document.getElementById('estado').innerHTML = '❌ No se puede conectar. ¿El servidor está corriendo? (python rest_server.py)';
+            }
+        };
+        
+        async function hacerPeticion(url, options = {}) {
+            try {
+                document.getElementById('error-mensaje').innerHTML = '';
+                document.getElementById('resultado').textContent = 'Cargando...';
+                
+                const res = await fetch(url, options);
+                const data = await res.json();
+                
+                if (!res.ok) {
+                    document.getElementById('error-mensaje').innerHTML = '❌ Error HTTP ' + res.status + ': ' + (data.error || 'Error desconocido');
+                }
+                
+                document.getElementById('resultado').textContent = JSON.stringify(data, null, 2);
+            } catch (e) {
+                document.getElementById('resultado').textContent = 'ERROR: ' + e.message;
+                document.getElementById('error-mensaje').innerHTML = '❌ Error de conexión: ' + e.message;
+            }
+        }
+        
+        async function getAll() {
+            await hacerPeticion(`${BASE_URL}/students`);
+        }
+        
+        async function getOne() {
+            const id = document.getElementById('getId').value;
+            await hacerPeticion(`${BASE_URL}/students/${id}`);
+        }
+        
+        async function create() {
+            const student = {
+                name: document.getElementById('postName').value,
+                email: document.getElementById('postEmail').value,
+                age: parseInt(document.getElementById('postAge').value) || 0
+            };
+            
+            await hacerPeticion(`${BASE_URL}/students`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(student)
+            });
+        }
+        
+        async function update() {
+            const id = document.getElementById('putId').value;
+            
+            // Construir objeto solo con campos que tienen valor
+            const student = {};
+            const name = document.getElementById('putName').value;
+            const email = document.getElementById('putEmail').value;
+            const age = document.getElementById('putAge').value;
+            
+            if (name) student.name = name;
+            if (email) student.email = email;
+            if (age) student.age = parseInt(age);
+            
+            await hacerPeticion(`${BASE_URL}/students/${id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(student)
+            });
+        }
+        
+        async function remove() {
+            const id = document.getElementById('deleteId').value;
+            await hacerPeticion(`${BASE_URL}/students/${id}`, {
+                method: 'DELETE'
+            });
+        }
+    </script>
+</body>
+</html>

@@ -3,7 +3,7 @@ const APP_STATE = {
     isLoggedIn: false,
     currentUser: null,
     token: localStorage.getItem('auth_token') || null,
-    API_URL: 'http://localhost:5000'  // URL del backend
+    API_URL: 'http://localhost:3000'  // URL del backend
 };
 
 // ===== INICIALIZACIÓN =====
@@ -325,7 +325,7 @@ async function handleRegistro() {
         return;
     }
 
-    const userType = document.querySelector('input[name="userType"]:checked')?.value;
+    const userType = document.querySelector('input[name="userType"]:checked')?.value || 'athlete';
     const nombre = document.getElementById("reg-nombre").value.trim();
     const email = document.getElementById("reg-email").value.trim();
     const phone = document.getElementById("reg-phone").value.trim();
@@ -344,7 +344,7 @@ async function handleRegistro() {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ 
-                userType: "tipo de usuario",
+                userType,
                 full_name: nombre, 
                 email, 
                 phone,

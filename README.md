@@ -52,11 +52,27 @@ npm install
 ```bash
 node app.js
 ```
-El servidor estará disponible en `http://localhost:5000`
+El servidor estará disponible en `http://localhost:3000`
+
+#### 4.1 Configuración de APIs de miembros de club
+- Crea un archivo `.env` en la carpeta `backend`
+- Copia el contenido de `.env.example`
+- Completa las variables:
+  - `PORT=3000`
+  - `JWT_SECRET=tu_secreto_jwt`
+  - `TELEGRAM_BOT_TOKEN=tu_token_de_bot`
+  - `TELEGRAM_CHAT_ID=tu_chat_id`
+
+#### 4.2 Endpoints principales
+- `GET /api/members` - Lista todos los miembros del club
+- `GET /api/members/:id` - Obtiene un miembro por ID
+- `POST /api/members` - Crea un miembro u organizador de club
+- `PUT /api/members/:id` - Actualiza un miembro existente
+- `DELETE /api/members/:id` - Elimina un miembro
 
 #### 5. Abrir el frontend
 - Abre `index.html` en el navegador o sirve los archivos con un servidor HTTP local
-- La aplicación se conectará automáticamente al backend en `http://localhost:5000`
+- La aplicación se conectará automáticamente al backend en `http://localhost:3000`
 
 ### Flujo de Uso
 1. **Registrarse** - Crea una cuenta con tu nombre, email, teléfono y contraseña
