@@ -178,9 +178,113 @@ section {
     margin-top: 1rem;
 }
 
+.api-client {
+    background: rgba(0, 31, 63, 0.98);
+    border-top: 2px solid rgba(0, 255, 127, 0.15);
+    border-bottom: 2px solid rgba(0, 255, 127, 0.15);
+    color: #ffffff;
+    margin: 2rem 0;
+}
+
+.api-client .form-label,
+.api-client h2,
+.api-client h4,
+.api-client p,
+.api-client small,
+.api-client label {
+    color: #e6fff0;
+}
+
+.api-client .form-control,
+.api-client .form-select {
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(0, 255, 127, 0.35);
+    color: #ffffff;
+}
+
+.api-client .form-control::placeholder,
+.api-client .form-select::placeholder {
+    color: rgba(255, 255, 255, 0.65);
+}
+
+.api-client .form-control:focus,
+.api-client .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #00ff7f;
+    box-shadow: 0 0 15px rgba(0, 255, 127, 0.25);
+}
+
+.api-client pre {
+    background-color: rgba(255, 255, 255, 0.08);
+    color: #e6fff0;
+    border-color: rgba(0, 255, 127, 0.25);
+}
+
+.api-client .btn {
+    min-width: 140px;
+}
+
+.api-client .btn-outline-primary {
+    background-color: #00ff7f;
+    color: #001f3f;
+    border-color: #00ff7f;
+}
+
+.api-client .btn-outline-primary:hover {
+    background-color: #00cc66;
+    color: #001f3f;
+    border-color: #00cc66;
+}
+
+.api-client .btn-success {
+    background-color: #00ff7f;
+    border-color: #00ff7f;
+    color: #001f3f;
+}
+
+.api-client .btn-warning {
+    background-color: #ffd166;
+    border-color: #ffd166;
+    color: #001f3f;
+}
+
+.api-client .btn-danger {
+    background-color: #ff5f5f;
+    border-color: #ff5f5f;
+    color: #001f3f;
+}
+
+.modal-content {
+    background: rgba(0, 31, 63, 0.98);
+    border: 1px solid rgba(0, 255, 127, 0.22);
+}
+
+.modal-content .modal-header,
+.modal-content .modal-body,
+.modal-content .modal-footer {
+    color: #e6fff0;
+}
+
+.modal-content .form-control,
+.modal-content .form-select {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(0, 255, 127, 0.3);
+    color: #ffffff;
+}
+
+.modal-content .form-control:focus,
+.modal-content .form-select:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
+.error {
+    border-color: #ff6b6b !important;
+}
+
 .hero h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
+    color: #00FF7F;
 }
 
 .hero p {
@@ -278,9 +382,105 @@ body.light .navbar {
     background-color: #e0e0e0 !important;
 }
 
-body.light .hero {
+.navbar-brand-bg {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    background-color: transparent;
+    transition: background-color 0.3s ease;
+}
+
+body.light .navbar-brand-bg {
+    background-color: #001f3f;
+    color: #ffffff;
+}
+
+.resultado-output {
+    background-color: #001f3f !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(0, 255, 127, 0.3) !important;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+body.light .resultado-output {
+    background-color: transparent !important;
+    color: #001f3f !important;
+    border-color: #001f3f !important;
+}
+
+body.light .hero h1 {
+    color: #088008;
+}
+
+body.light .api-client {
+    background: #f8fafc;
     color: #001f3f;
-    background: linear-gradient(135deg, #f4f4f4, #e0e0e0);
+    border-color: #cbd5e1;
+}
+
+body.light .api-client .form-label,
+body.light .api-client h2,
+body.light .api-client h4,
+body.light .api-client p,
+body.light .api-client small,
+body.light .api-client label {
+    color: #001f3f;
+}
+
+body.light .api-client .form-control,
+body.light .api-client .form-select {
+    background-color: #ffffff;
+    border-color: #001f3f;
+    color: #001f3f;
+}
+
+body.light .api-client .form-control::placeholder,
+body.light .api-client .form-select::placeholder {
+    color: #64748b;
+}
+
+body.light .api-client .form-control::placeholder,
+body.light .api-client .form-select::placeholder {
+    color: #656d78;
+}
+
+body.light .api-client .form-control:focus,
+body.light .api-client .form-select:focus {
+    border-color: #001f3f;
+    box-shadow: 0 0 8px rgba(0, 31, 63, 0.1);
+}
+
+body.light .api-client pre {
+    background-color: #ffffff;
+    color: #001f3f;
+    border-color: #cbd5e1;
+}
+
+body.light .api-client .btn-outline-primary {
+    background-color: #001f3f;
+    color: #ffffff;
+    border-color: #001f3f;
+}
+
+body.light .api-client .btn-outline-primary:hover {
+    background-color: #003d66;
+    color: #ffffff;
+    border-color: #003d66;
+}
+
+body.light .modal-content {
+    background: #ffffff;
+    color: #001f3f;
+    border-color: #d0d7e0;
+}
+
+body.light .modal-content .form-control,
+body.light .modal-content .form-select {
+    background-color: #f8f9fb;
+    border-color: #001f3f;
+    color: #001f3f;
 }
 
 body.light footer {

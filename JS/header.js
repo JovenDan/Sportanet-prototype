@@ -140,7 +140,7 @@ function validateLoginForm() {
  * @returns {boolean}
  */
 function validateRegistroForm() {
-    const userType = document.getElementById("reg-user-type").checked ? "organizer" : "athlete"; // Ejemplo de asignación de tipo de usuario
+    const userType = document.querySelector('input[name="userType"]:checked')?.value;
     const nombre = document.getElementById("reg-nombre").value.trim();
     const email = document.getElementById("reg-email").value.trim();
     const phone = document.getElementById("reg-phone").value.trim();
@@ -150,6 +150,12 @@ function validateRegistroForm() {
 
     // Limpiar errores previos
     clearErrorMessages("registro");
+
+    // Validar tipo de usuario
+    if (!userType) {
+        showError("registro", "user-type", "Selecciona un tipo de usuario");
+        isValid = false;
+    }
 
     // Validar nombre
     if (!nombre) {
@@ -225,7 +231,7 @@ function showError(form, field, message) {
  */
 function clearErrorMessages(form) {
     const prefix = form === "login" ? "login" : "reg";
-    document.querySelectorAll(`#error-${prefix}-email, #error-${prefix}-password, #error-${prefix}-nombre, #error-${prefix}-password_confirm, #error-${prefix}-phone`).forEach(el => {
+    document.querySelectorAll(`#error-${prefix}-email, #error-${prefix}-password, #error-${prefix}-nombre, #error-${prefix}-password_confirm, #error-${prefix}-phone, #error-${prefix}-user-type`).forEach(el => {
         el.textContent = "";
         el.classList.remove("show");
     });
@@ -305,7 +311,7 @@ async function handleLogin() {
             }, 1500);
         } else {
             // Error del servidor
-            showMessage("login", "error", data.message || "Error al iniciar sesión. Verifica tus credenciales.");
+            showMessage("login", "error", data.error || data.message || "Error al iniciar sesión. Verifica tus credenciales.");
         }
     } catch (error) {
         console.error("Error al conectar con el servidor:", error);
@@ -379,7 +385,7 @@ async function handleRegistro() {
             }, 1500);
         } else {
             // Error del servidor
-            showMessage("registro", "error", data.message || "Error al crear la cuenta. Intenta con otro correo.");
+            showMessage("registro", "error", data.error || data.message || "Error al crear la cuenta. Intenta con otro correo.");
         }
     } catch (error) {
         console.error("Error al conectar con el servidor:", error);
