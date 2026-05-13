@@ -28,19 +28,36 @@ Sportanet es una plataforma web diseñada para facilitar la búsqueda, gestión 
 ### Requisitos Previos
 - Node.js (v14 o superior)
 - MySQL Server ejecutándose
+- MySQL Workbench instalado
 - Un navegador web moderno
 
 ### Pasos de Instalación
 
 #### 1. Clonar el repositorio
 ```bash
-git clone https://github.com/Heyder-83/Sportanet-project.git
-cd Sportanet-project
+git clone https://github.com/JovenDan/Sportanet-prototype.git
+cd Sportanet-prototype
 ```
 
 #### 2. Configurar la base de datos
-- Crear una base de datos MySQL llamada `sportanet_v1`
-- Ejecutar las migraciones necesarias para crear las tablas
+Para configurar la base de datos, sigue estos pasos:
+
+1. **Instalar MySQL Server y MySQL Workbench**:
+   - Descarga e instala MySQL Server desde el sitio oficial de MySQL (https://dev.mysql.com/downloads/mysql/).
+   - Descarga e instala MySQL Workbench desde el mismo sitio (https://dev.mysql.com/downloads/workbench/).
+   - Durante la instalación, configura una contraseña para el usuario root de MySQL.
+
+2. **Crear la base de datos**:
+   - Abre MySQL Workbench.
+   - Conéctate a tu servidor MySQL local (generalmente con usuario 'root' y la contraseña configurada).
+   - Crea una nueva base de datos llamada `sportanet_v1` con codificación UTF-8 (utf8mb4).
+
+3. **Importar el esquema de la base de datos**:
+   - En MySQL Workbench, selecciona la base de datos `sportanet_v1`.
+   - Ve a "Server" > "Data Import".
+   - Selecciona "Import from Self-Contained File" y elige el archivo `database/sportanet_v1.sql` del repositorio.
+   - Selecciona la base de datos de destino como `sportanet_v1`.
+   - Ejecuta la importación para crear las tablas y datos iniciales.
 
 #### 3. Instalar dependencias del backend
 ```bash
