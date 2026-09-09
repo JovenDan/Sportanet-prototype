@@ -65,6 +65,10 @@ cd backend
 npm install
 ```
 
+#### 3.1 Actualizar la Base de Datos
+Ejecuta el archivo `update_db.bat` en la raíz del proyecto para actualizar el esquema de la base de datos `sportanet_v1` (añade el campo de roles faltante para el módulo de Login/Register).
+
+
 #### 4. Iniciar el backend
 ```bash
 node app.js

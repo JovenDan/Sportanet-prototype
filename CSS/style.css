@@ -202,6 +202,11 @@ section {
     color: #ffffff;
 }
 
+.api-client .form-select option {
+    background-color: #001f3f;
+    color: #ffffff;
+}
+
 .api-client .form-control::placeholder,
 .api-client .form-select::placeholder {
     color: rgba(255, 255, 255, 0.65);
@@ -261,8 +266,19 @@ section {
 
 .modal-content .modal-header,
 .modal-content .modal-body,
-.modal-content .modal-footer {
+.modal-content .modal-footer,
+.modal-content label,
+.modal-content p,
+.modal-content h5 {
     color: #e6fff0;
+}
+
+.modal-content .btn-link {
+    color: #00FF7F;
+}
+
+.modal-content .btn-link:hover {
+    color: #00cc66;
 }
 
 .modal-content .form-control,
@@ -481,6 +497,37 @@ body.light .modal-content .form-select {
     background-color: #f8f9fb;
     border-color: #001f3f;
     color: #001f3f;
+}
+
+body.light .modal-content .modal-header,
+body.light .modal-content .modal-body,
+body.light .modal-content .modal-footer,
+body.light .modal-content h5.modal-title,
+body.light .modal-content label,
+body.light .modal-content p {
+    color: #001f3f !important;
+}
+
+body.light .modal-content .link-button,
+body.light .modal-content .btn-link {
+    color: #001f3f;
+    font-weight: bold;
+}
+
+body.light .modal-content .btn-link:hover {
+    color: #003d66;
+}
+
+body.light .form-message.success {
+    background-color: rgba(8, 128, 8, 0.1);
+    color: #088008;
+    border-color: #088008;
+}
+
+body.light .form-message.error {
+    background-color: rgba(204, 0, 0, 0.1);
+    color: #cc0000;
+    border-color: #cc0000;
 }
 
 body.light footer {

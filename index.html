@@ -110,7 +110,7 @@
             </div>
         </section>
 
-        <section id="member-api-client" class="api-client py-5">
+        <section id="member-api-client" class="api-client py-5 d-none">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6">
@@ -127,19 +127,20 @@
                         <hr>
                         <h4>Crear miembro del club</h4>
                         <div class="mb-3">
-                            <input id="postName" class="form-control" placeholder="Nombre" value="María González">
+                            <input id="postName" class="form-control" placeholder="Nombre" value="">
                         </div>
                         <div class="mb-3">
-                            <input id="postEmail" class="form-control" placeholder="Email" value="maria@uni.edu">
+                            <input id="postEmail" class="form-control" placeholder="Email" value="">
                         </div>
                         <div class="mb-3">
-                            <input id="postAge" type="number" class="form-control" placeholder="Edad" value="21">
+                            <input id="postAge" type="number" class="form-control" placeholder="Edad" value="">
                         </div>
                         <div class="mb-3">
                             <label for="postRole" class="form-label">Rol</label>
                             <select id="postRole" class="form-select">
                                 <option value="member" selected>Miembro</option>
                                 <option value="organizer">Organizador</option>
+                                <option value="admin">Admin</option>
                             </select>
                         </div>
                         <button class="btn btn-success mb-3" id="btn-create">Crear miembro</button>
@@ -147,16 +148,16 @@
                         <hr>
                         <h4>Actualizar miembro</h4>
                         <div class="mb-3">
-                            <input id="putId" type="number" class="form-control" placeholder="ID" value="1">
+                            <input id="putId" type="number" class="form-control" placeholder="ID" value="">
                         </div>
                         <div class="mb-3">
-                            <input id="putName" class="form-control" placeholder="Nombre (opcional)" value="Ana Actualizada">
+                            <input id="putName" class="form-control" placeholder="Nombre (opcional)" value="">
                         </div>
                         <div class="mb-3">
-                            <input id="putEmail" class="form-control" placeholder="Email (opcional)" value="ana.nuevo@uni.edu">
+                            <input id="putEmail" class="form-control" placeholder="Email (opcional)" value="">
                         </div>
                         <div class="mb-3">
-                            <input id="putAge" type="number" class="form-control" placeholder="Edad (opcional)" value="23">
+                            <input id="putAge" type="number" class="form-control" placeholder="Edad (opcional)" value="">
                         </div>
                         <div class="mb-3">
                             <label for="putRole" class="form-label">Rol (opcional)</label>
@@ -164,6 +165,7 @@
                                 <option value="">-- Mantener rol actual --</option>
                                 <option value="member">Miembro</option>
                                 <option value="organizer">Organizador</option>
+                                <option value="admin">Admin</option>
                             </select>
                         </div>
                         <button class="btn btn-warning mb-3" id="btn-update">Actualizar miembro</button>
@@ -171,7 +173,7 @@
                         <hr>
                         <h4>Eliminar miembro</h4>
                         <div class="mb-3">
-                            <input id="deleteId" type="number" class="form-control" placeholder="ID" value="3">
+                            <input id="deleteId" type="number" class="form-control" placeholder="ID" value="">
                         </div>
                         <button class="btn btn-danger mb-3" id="btn-delete">Eliminar miembro</button>
                     </div>

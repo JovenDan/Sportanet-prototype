@@ -1,98 +1,45 @@
 const express = require('express');
-const https = require('https');
+const pool = require('../db/connection');
+const bcrypt = require('bcrypt');
+const { sendTelegramMessage } = require('../utils/telegram');
 
 const router = express.Router();
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
-const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
-
-const members = new Map([
-  [1, { id: 1, name: 'Ana García', email: 'ana@uni.edu', age: 22, role: 'member' }],
-  [2, { id: 2, name: 'Carlos López', email: 'carlos@uni.edu', age: 23, role: 'organizer' }]
-]);
-let nextId = 3;
-
-function sendTelegramMessage(text) {
-  return new Promise((resolve) => {
-    if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
-      console.warn('Telegram credentials not configured. Skipping notification.');
-      return resolve(false);
-    }
-
-    const payload = JSON.stringify({
-      chat_id: TELEGRAM_CHAT_ID,
-      text,
-      parse_mode: 'HTML'
-    });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(payload)
-      }
-    };
-
-    const req = https.request(
-      `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-      requestOptions,
-      (res) => {
-        let body = '';
-        res.on('data', (chunk) => {
-          body += chunk;
-        });
-        res.on('end', () => {
-          if (res.statusCode >= 200 && res.statusCode < 300) {
-            resolve(true);
-          } else {
-            console.error('Telegram API error:', res.statusCode, body);
-            resolve(false);
-          }
-        });
-      }
-    );
-
-    req.on('error', (error) => {
-      console.error('Telegram request failed:', error);
-      resolve(false);
-    });
-
-    req.write(payload);
-    req.end();
-  });
+function formatMemberNotification(member, action) {
+  let roleLabel = 'Miembro';
+  if (member.role === 'organizer') roleLabel = 'Organizador';
+  if (member.role === 'admin') roleLabel = 'Admin';
+  return `${action} de club:\n<b>${member.name}</b>\nRol: ${roleLabel}\nEmail: ${member.email}`;
 }
 
-function createMemberPayload(data) {
+// Map user DB row to member object expected by frontend
+function mapUserToMember(row) {
+  let role = 'member';
+  if (row.userType === 'organizer') role = 'organizer';
+  if (row.userType === 'admin') role = 'admin';
+
   return {
-    id: nextId,
-    name: data.name,
-    email: data.email || '',
-    age: Number(data.age || 0),
-    role: data.role === 'organizer' ? 'organizer' : 'member'
+    id: row.user_id,
+    name: row.full_name,
+    email: row.email,
+    age: 0, // No guardamos edad en tabla users directamente
+    role: role
   };
 }
 
-function formatMemberNotification(member, action) {
-  const roleLabel = member.role === 'organizer' ? 'Organizador' : 'Miembro';
-  return `${action} de club:\n<b>${member.name}</b>\nRol: ${roleLabel}\nEmail: ${member.email}\nEdad: ${member.age}`;
-}
-
 router.get('/', (req, res) => {
-  res.json(Array.from(members.values()));
+  pool.query('SELECT * FROM users', (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(rows.map(mapUserToMember));
+  });
 });
 
 router.get('/:id', (req, res) => {
-  const memberId = Number(req.params.id);
-  if (Number.isNaN(memberId)) {
-    return res.status(400).json({ error: 'ID inválido' });
-  }
-
-  const member = members.get(memberId);
-  if (!member) {
-    return res.status(404).json({ error: 'No encontrado' });
-  }
-
-  res.json(member);
+  pool.query('SELECT * FROM users WHERE user_id = ?', [req.params.id], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (rows.length === 0) return res.status(404).json({ error: 'No encontrado' });
+    res.json(mapUserToMember(rows[0]));
+  });
 });
 
 router.post('/', async (req, res) => {
@@ -101,57 +48,109 @@ router.post('/', async (req, res) => {
   if (!name || typeof name !== 'string' || name.trim().length === 0) {
     return res.status(400).json({ error: "Campo 'name' requerido" });
   }
+  if (!email) {
+    return res.status(400).json({ error: "Campo 'email' requerido" });
+  }
 
-  const member = createMemberPayload({ name: name.trim(), email, age, role });
-  members.set(nextId, member);
-  nextId += 1;
+  try {
+    // Hasheamos la contraseña por defecto que pidió el usuario: "deault"
+    const hashedPwd = await bcrypt.hash('deault', 10);
+    
+    let userType = 'athlete';
+    if (role === 'organizer') userType = 'organizer';
+    if (role === 'admin') userType = 'admin';
+    
+    const userData = {
+      userType,
+      full_name: name.trim(),
+      email,
+      phone: null,
+      pwd: hashedPwd
+    };
 
-  const notificationText = formatMemberNotification(member, 'Nuevo miembro');
-  await sendTelegramMessage(notificationText);
+    pool.query('INSERT INTO users SET ?', userData, async (err, result) => {
+      if (err) {
+        if (err.code === 'ER_DUP_ENTRY') {
+           return res.status(400).json({ error: 'Email already registered' });
+        }
+        return res.status(500).json({ error: err.message });
+      }
 
-  res.status(201).json(member);
+      const member = {
+        id: result.insertId,
+        name: userData.full_name,
+        email: userData.email,
+        age: Number(age || 0),
+        role: role === 'organizer' ? 'organizer' : (role === 'admin' ? 'admin' : 'member')
+      };
+
+      const notificationText = formatMemberNotification(member, 'Nuevo miembro');
+      await sendTelegramMessage(notificationText);
+
+      res.status(201).json(member);
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Error encrypting password' });
+  }
 });
 
 router.put('/:id', async (req, res) => {
-  const memberId = Number(req.params.id);
-  if (Number.isNaN(memberId)) {
-    return res.status(400).json({ error: 'ID inválido' });
+  const memberId = req.params.id;
+  const { name, email, role } = req.body; // ignored age since it's not in db
+
+  const data = {};
+  if (name) data.full_name = name;
+  if (email) data.email = email;
+  if (role) {
+    let userType = 'athlete';
+    if (role === 'organizer') userType = 'organizer';
+    if (role === 'admin') userType = 'admin';
+    data.userType = userType;
   }
 
-  const member = members.get(memberId);
-  if (!member) {
-    return res.status(404).json({ error: 'Miembro no encontrado' });
+  if (Object.keys(data).length === 0) {
+    return res.status(400).json({ error: 'Agrega al menos un campo para actualizar' });
   }
 
-  const { name, email, age, role } = req.body;
-  if (name) member.name = name;
-  if (email) member.email = email;
-  if (typeof age !== 'undefined') member.age = Number(age);
-  if (role) member.role = role === 'organizer' ? 'organizer' : 'member';
+  pool.query('UPDATE users SET ? WHERE user_id = ?', [data, memberId], (err, result) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (result.affectedRows === 0) return res.status(404).json({ error: 'Miembro no encontrado' });
 
-  const notificationText = formatMemberNotification(member, 'Miembro actualizado');
-  await sendTelegramMessage(notificationText);
-
-  res.json(member);
+    pool.query('SELECT * FROM users WHERE user_id = ?', [memberId], async (err, rows) => {
+      if (!err && rows.length > 0) {
+        const member = mapUserToMember(rows[0]);
+        const notificationText = formatMemberNotification(member, 'Miembro actualizado');
+        await sendTelegramMessage(notificationText);
+        res.json(member);
+      } else {
+        res.json({ message: 'User updated' });
+      }
+    });
+  });
 });
 
 router.delete('/:id', async (req, res) => {
-  const memberId = Number(req.params.id);
-  if (Number.isNaN(memberId)) {
-    return res.status(400).json({ error: 'ID inválido' });
-  }
+  const memberId = req.params.id;
 
-  if (!members.has(memberId)) {
-    return res.status(404).json({ error: 'Miembro no encontrado' });
-  }
+  pool.query('SELECT * FROM users WHERE user_id = ?', [memberId], (err, rows) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (rows.length === 0) return res.status(404).json({ error: 'Miembro no encontrado' });
 
-  const deletedMember = members.get(memberId);
-  members.delete(memberId);
+    const deletedMember = mapUserToMember(rows[0]);
 
-  const notificationText = `Miembro eliminado:\n<b>${deletedMember.name}</b> (ID: ${memberId})`;
-  await sendTelegramMessage(notificationText);
+    pool.query('DELETE FROM user_profile WHERE user_id = ?', [memberId], (err1) => {
+      if (err1) console.error('Error deleting user_profile:', err1);
+      
+      pool.query('DELETE FROM users WHERE user_id = ?', [memberId], async (err2) => {
+        if (err2) return res.status(500).json({ error: err2.message });
 
-  res.json({ message: 'Eliminado correctamente' });
+        const notificationText = `Miembro eliminado:\n<b>${deletedMember.name}</b> (ID: ${memberId})`;
+        await sendTelegramMessage(notificationText);
+
+        res.json({ message: 'Eliminado correctamente' });
+      });
+    });
+  });
 });
 
 module.exports = router;

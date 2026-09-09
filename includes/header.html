@@ -70,11 +70,9 @@
             <div class="invalid-feedback" id="error-login-password"></div>
           </div>
           <button type="submit" class="btn btn-primary w-100" id="btn-submit-login">Ingresar</button>
-          <div class="form-text text-center mt-2" id="login-message"></div>
-          <p class="text-center mt-3">
-            ¿No tienes cuenta?
-            <button type="button" id="mostrar-registro" class="btn btn-link p-0">Regístrate aquí</button>
-          </p>
+          <div class="form-message mt-2" id="login-message"></div>
+          <p class="text-center mt-3 mb-2">¿No tienes cuenta?</p>
+          <button type="button" id="mostrar-registro" class="btn btn-primary w-100">Regístrate aquí</button>
         </form>
 
         <!-- REGISTER FORM -->
@@ -129,11 +127,9 @@
             <div class="invalid-feedback" id="error-reg-password-confirm"></div>
           </div>
           <button type="submit" class="btn btn-primary w-100" id="btn-submit-registro">Crear Cuenta</button>
-          <div class="form-text text-center mt-2" id="registro-message"></div>
-          <p class="text-center mt-3">
-            ¿Ya tienes cuenta?
-            <button type="button" id="mostrar-login" class="btn btn-link p-0">Inicia sesión aquí</button>
-          </p>
+          <div class="form-message mt-2" id="registro-message"></div>
+          <p class="text-center mt-3 mb-2">¿Ya tienes cuenta?</p>
+          <button type="button" id="mostrar-login" class="btn btn-primary w-100">Inicia sesión aquí</button>
         </form>
       </div>
     </div>
@@ -175,7 +171,7 @@
             <button type="submit" class="btn btn-primary" id="btn-guardar-perfil">Guardar Cambios</button>
             <button type="button" class="btn btn-secondary" id="btn-cancelar-perfil">Cancelar</button>
           </div>
-          <div class="form-text text-center mt-2" id="perfil-message"></div>
+          <div class="form-message mt-2" id="perfil-message"></div>
           <div class="alert alert-danger kt-times margin-top" id="danger-zone"><!-- keep no changes? --></div>
         </form>
       </div>

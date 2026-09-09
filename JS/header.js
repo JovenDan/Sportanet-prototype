@@ -457,11 +457,21 @@ function updateUIAfterLogin() {
     const btnLogin = document.getElementById("btn-login");
     const userMenuContainer = document.getElementById("user-menu-container");
     const userName = document.getElementById("user-name");
+    const crudModule = document.getElementById("member-api-client");
 
-    if (btnLogin) btnLogin.style.display = "none";
+    if (btnLogin) btnLogin.classList.add("d-none");
     if (userMenuContainer) {
-        userMenuContainer.style.display = "flex";
+        userMenuContainer.classList.remove("d-none");
+        userMenuContainer.classList.add("d-flex");
         if (userName) userName.textContent = `Hola, ${user.full_name || user.nombre || user.name || "Usuario"}`;
+    }
+
+    if (crudModule) {
+        if (user.userType === 'admin') {
+            crudModule.classList.remove("d-none");
+        } else {
+            crudModule.classList.add("d-none");
+        }
     }
 }
 
@@ -471,9 +481,17 @@ function updateUIAfterLogin() {
 function updateUIAfterLogout() {
     const btnLogin = document.getElementById("btn-login");
     const userMenuContainer = document.getElementById("user-menu-container");
+    const crudModule = document.getElementById("member-api-client");
 
-    if (btnLogin) btnLogin.style.display = "block";
-    if (userMenuContainer) userMenuContainer.style.display = "none";
+    if (btnLogin) btnLogin.classList.remove("d-none");
+    if (userMenuContainer) {
+        userMenuContainer.classList.add("d-none");
+        userMenuContainer.classList.remove("d-flex");
+    }
+
+    if (crudModule) {
+        crudModule.classList.add("d-none");
+    }
 }
 
 /**

@@ -4,6 +4,7 @@ const router = express.Router();
 const pool = require('../db/connection');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { sendTelegramMessage } = require('../utils/telegram');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
 
@@ -38,6 +39,11 @@ router.post('/register', async (req, res) => {
                 }
                 return res.status(500).json({ error: err.message });
             }
+
+            // Enviar notificación a Telegram (mismo formato que el módulo CRUD)
+            const roleLabel = userType === 'organizer' ? 'Organizador' : 'Miembro';
+            const notificationText = `Nuevo miembro de club:\n<b>${full_name}</b>\nRol: ${roleLabel}\nEmail: ${email}`;
+            sendTelegramMessage(notificationText).catch(e => console.error("Error sending telegram notification:", e));
 
             // Generar token JWT (emisión)
             // Payload mínimo: id y email. El token permite que el cliente se autentique en peticiones posteriores.
